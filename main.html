@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SysAdmin Portfolio | Apple Style</title>
+    <title>Alex Capitán</title>
     <!-- Cargamos Three.js desde CDN -->
     <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
     <script type="importmap">
@@ -63,6 +63,13 @@
             font-weight: 600;
             font-size: 1.2rem;
             letter-spacing: -0.5px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
         }
 
         .nav-links {
@@ -83,13 +90,19 @@
             color: var(--text-primary);
         }
 
+        .social-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
         .social-links svg {
             width: 18px;
             height: 18px;
             fill: var(--text-secondary);
             transition: fill 0.3s;
         }
-        
+
         .social-links a:hover svg {
             fill: var(--text-primary);
         }
@@ -109,24 +122,35 @@
             text-align: center;
             z-index: 10;
             margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeIn Up 1s forwards 0.5s;
         }
 
-        h1 {
-            font-size: 4rem;
+        /* Título Principal (Hi, I'm Alex) */
+        /* Estilo consistente con el resto de la web, solo más grande */
+        .hero-text h1 {
+            font-size: 5rem;
             font-weight: 700;
             letter-spacing: -2px;
-            background: linear-gradient(180deg, #fff, #888);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-primary);
             margin-bottom: 10px;
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .subtitle {
-            font-size: 1.5rem;
-            color: var(--text-secondary);
+        /* Subtítulo (Arquitectura de Sistemas) */
+        .hero-text .hero-subtitle {
+            font-size: 2rem;
             font-weight: 400;
+            color: var(--text-secondary);
+            letter-spacing: -0.5px;
+            opacity: 0;
+            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s; /* Pequeño delay */
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            .hero-text h1 { font-size: 3.5rem; }
+            .hero-text .hero-subtitle { font-size: 1.5rem; }
         }
 
         /* Contenedor del Canvas 3D */
@@ -163,6 +187,7 @@
             font-size: 2.5rem;
             margin-bottom: 40px;
             letter-spacing: -1px;
+            color: var(--text-primary);
         }
 
         /* --- About & Server Animation --- */
@@ -244,11 +269,58 @@
         .project-card h3 {
             font-size: 1.5rem;
             margin-bottom: 10px;
+            color: var(--text-primary);
         }
 
         .project-card p {
             color: var(--text-secondary);
             line-height: 1.5;
+        }
+
+        /* Botón estilo Apple */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .btn-apple {
+            display: inline-block;
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 980px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .btn-apple:hover, .btn-apple:focus {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: scale(1.02);
+            color: #fff;
+            outline: none;
+        }
+
+        .btn-apple:active {
+            transform: scale(0.98);
+        }
+
+        /* Ajustes específicos para sección de contacto */
+        #contact .project-card h2 {
+            margin-bottom: 15px;
+            line-height: 1.1;
+        }
+
+        #contact .project-card p {
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: var(--text-secondary);
         }
 
         /* --- Animations --- */
@@ -291,14 +363,23 @@
 
     <nav>
         <div class="nav-container">
-            <div class="logo">SysAdmin.</div>
+            <a href="#" class="logo" aria-label="Ir al inicio">Alex Capitán</a>
+
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
-                <li><a href="#projects">Work</a></li>
+                <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <div class="social-links">
-                    <a href="#" aria-label="GitHub">
+                    <!-- Icono GitHub -->
+                    <a href="https://github.com/kpiax" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                         <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+
+                    <!-- Icono LinkedIn -->
+                    <a href="https://www.linkedin.com/in/alex-capit%C3%A1n-rodr%C3%ADguez-6b2b572aa?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
                     </a>
                 </div>
             </ul>
@@ -308,26 +389,28 @@
     <!-- HERO SECTION CON 3D -->
     <div class="hero">
         <div class="hero-text">
-            <h1>Arquitectura de Sistemas.</h1>
-            <p class="subtitle">Minimalismo, rendimiento y escalabilidad.</p>
+            <!-- Título principal -->
+            <h1>Hi, I'm Alex</h1>
+            <!-- Subtítulo -->
+            <p class="hero-subtitle">Cybersecurity student.</p>
         </div>
-        
+
         <!-- Aquí vive el 3D -->
         <div id="canvas-container"></div>
-        
+
         <div class="scroll-prompt">Scroll para cerrar</div>
     </div>
 
     <main>
         <section id="about" class="reveal">
-            <h2>Sobre mí</h2>
+            <h2>About me</h2>
             <div class="about-container">
                 <div class="about-text">
                     <h3>Ingeniero de Sistemas</h3>
                     <p>Especializado en infraestructura cloud y automatización. Transformo procesos complejos en soluciones elegantes y mantenibles. Mi enfoque es similar al diseño de Apple: lo que no se ve es tan importante como lo que se ve.</p>
                     <p>Manejo Docker, Kubernetes y arquitecturas AWS con precisión quirúrgica.</p>
                 </div>
-                <!-- Animación CSS Server mejorada -->
+                <!-- Animación CSS Server -->
                 <div class="server-rack">
                     <div class="server-unit">
                         <span style="font-family: monospace; font-size: 10px; color: #555;">SRV-01 // PRODUCTION</span>
@@ -359,6 +442,7 @@
 
         <section id="projects" class="reveal">
             <h2>Proyectos Selectos</h2>
+            <!-- Grid ajustado a 2 proyectos -->
             <div class="projects-grid">
                 <div class="project-card">
                     <h3>Cloud Migration</h3>
@@ -368,31 +452,32 @@
                     <h3>DevOps Pipeline</h3>
                     <p>Implementación de CI/CD con GitHub Actions reduciendo el tiempo de despliegue en un 60%.</p>
                 </div>
-                <div class="project-card">
-                    <h3>Monitoring Hub</h3>
-                    <p>Dashboard centralizado en Grafana para visualización de métricas en tiempo real.</p>
-                </div>
+            </div>
+
+            <!-- Botón Ver Todos -->
+            <div class="button-container">
+                <a href="projects.html" class="btn-apple">Ver todos los proyectos</a>
             </div>
         </section>
 
         <section id="contact" class="reveal">
             <div class="project-card" style="text-align: center;">
-                <h2>Trabajemos Juntos</h2>
-                <p>¿Tienes un desafío técnico? Estoy listo para resolverlo.</p>
-                <br>
-                <a href="mailto:tuemail@ejemplo.com" style="color: var(--accent); text-decoration: none; font-size: 1.2rem;">hola@tuemail.com</a>
+                <h2>Let's work together!</h2>
+                <p>Do you have a technical challenge? I'm ready to solve it.</p>
+                <a href="mailto:alexcapitanr@icloud.com" style="color: var(--accent); text-decoration: none; font-size: 1.2rem;">alexcapitanr@icloud.com</a>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Your Name. Designed with code.</p>
+        <p>&copy; 2026 Alex Capitán. Designed with love.</p>
     </footer>
 
     <!-- SCRIPT THREE.JS -->
     <script type="module">
         import * as THREE from 'three';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        // Importamos RoundedBoxGeometry para los bordes suaves
+        import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
         // 1. Configuración Básica
         const container = document.getElementById('canvas-container');
@@ -410,119 +495,109 @@
         container.appendChild(renderer.domElement);
 
         // 2. Iluminación "Studio"
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         scene.add(ambientLight);
 
-        const spotLight = new THREE.SpotLight(0xffffff, 1);
+        // Luz principal para los reflejos metálicos
+        const spotLight = new THREE.SpotLight(0xffffff, 1.2);
         spotLight.position.set(5, 10, 5);
         spotLight.angle = 0.5;
+        spotLight.penumbra = 0.5;
         scene.add(spotLight);
-        
-        const blueLight = new THREE.PointLight(0x2997ff, 2, 10);
-        blueLight.position.set(-2, 1, 2);
+
+        // Luz de relleno azulada
+        const blueLight = new THREE.PointLight(0x2997ff, 1.5, 10);
+        blueLight.position.set(-3, 2, 2);
         scene.add(blueLight);
 
-        // 3. Crear el MacBook (Procedural para que funcione sin cargar archivo)
-        // NOTA: Si tienes tu archivo .glb, borra esta parte de "Procedural" y usa el Loader de abajo.
-        
+        // 3. Crear el MacBook (Procedural Mejorado)
         const laptopGroup = new THREE.Group();
-        
-        // Materiales estilo Apple
-        const metalMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x888888, 
-            roughness: 0.2, 
-            metalness: 0.8 
-        });
-        const screenBlackMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x050505, 
-            roughness: 0.2 
-        });
-        const screenGlowingMaterial = new THREE.MeshBasicMaterial({ color: 0x1a1a1a }); // Pantalla apagada/oscura
 
-        // A. Base (Teclado)
-        const baseGeometry = new THREE.BoxGeometry(3, 0.1, 2);
+        // Materiales estilo Apple mejorados (Aluminio Anodizado)
+        const metalMaterial = new THREE.MeshStandardMaterial({
+            color: 0xa0a0a0,
+            roughness: 0.25,
+            metalness: 0.9
+        });
+
+        const screenBezelMaterial = new THREE.MeshStandardMaterial({
+            color: 0x000000,
+            roughness: 0.2
+        });
+
+        const screenGlowingMaterial = new THREE.MeshBasicMaterial({ color: 0x1a1a1a });
+
+        const trackpadMaterial = new THREE.MeshStandardMaterial({
+            color: 0x909090,
+            roughness: 0.3,
+            metalness: 0.8
+        });
+
+        // A. Base (Teclado) con bordes redondeados
+        const baseGeometry = new RoundedBoxGeometry(3, 0.15, 2, 4, 0.05);
         const base = new THREE.Mesh(baseGeometry, metalMaterial);
+
+        // Trackpad visual
+        const trackpadGeo = new THREE.PlaneGeometry(1, 0.7);
+        const trackpad = new THREE.Mesh(trackpadGeo, trackpadMaterial);
+        trackpad.rotation.x = -Math.PI / 2;
+        trackpad.position.y = 0.076;
+        trackpad.position.z = 0.5;
+        base.add(trackpad);
+
         laptopGroup.add(base);
 
-        // B. Tapa (Pantalla) - Esta es la parte compleja
+        // B. Tapa (Pantalla)
         const lidGroup = new THREE.Group();
-        // Movemos el grupo al borde trasero de la base (la bisagra)
-        lidGroup.position.set(0, 0.05, -1); 
+        lidGroup.position.set(0, 0.075, -1);
 
-        // La geometría de la tapa
-        const lidGeometry = new THREE.BoxGeometry(3, 0.1, 2);
-        // Movemos la geometría para que su centro no esté en el eje, sino desplazado
-        // Así al rotar el grupo, rota desde la bisagra
-        lidGeometry.translate(0, 0, 1); 
-        
+        // Carcasa de la tapa
+        const lidGeometry = new RoundedBoxGeometry(3, 0.1, 2, 4, 0.05);
+        lidGeometry.translate(0, 0, 1);
         const lid = new THREE.Mesh(lidGeometry, metalMaterial);
-        
-        // Simular pantalla negra dentro de la tapa
-        const screenGeo = new THREE.PlaneGeometry(2.8, 1.8);
-        screenGeo.translate(0, 0.06, 1); // Pegarlo a la tapa
+
+        // Bezel (Borde negro)
+        const bezelGeo = new THREE.PlaneGeometry(2.9, 1.9);
+        bezelGeo.translate(0, 0.051, 1);
+        bezelGeo.rotateX(-Math.PI / 2);
+        const bezel = new THREE.Mesh(bezelGeo, screenBezelMaterial);
+        lidGroup.add(bezel);
+
+        // Pantalla luminosa
+        const screenGeo = new THREE.PlaneGeometry(2.8, 1.75);
+        screenGeo.translate(0, 0.052, 1);
         screenGeo.rotateX(-Math.PI / 2);
         const screenMesh = new THREE.Mesh(screenGeo, screenGlowingMaterial);
-        
+
         lidGroup.add(lid);
         lidGroup.add(screenMesh);
         laptopGroup.add(lidGroup);
 
         scene.add(laptopGroup);
 
-        // Rotación inicial para presentación
+        // Rotación inicial
         laptopGroup.rotation.y = -0.3;
         laptopGroup.rotation.x = 0.2;
-
-
-        // --- SI TIENES TU MODELO .GLB, DESCOMENTA ESTO Y BORRA LO ANTERIOR ---
-        /*
-        let lidObject; // Variable para guardar la tapa
-        const loader = new GLTFLoader();
-        loader.load('ruta/a/tu/macbook.glb', (gltf) => {
-            const model = gltf.scene;
-            scene.add(model);
-            
-            // IMPORTANTE: Busca el nombre exacto de la tapa en Blender
-            lidObject = model.getObjectByName('Screen_Lid'); 
-        });
-        */
-
 
         // 4. Animación al hacer Scroll
         function onScroll() {
             const scrollY = window.scrollY;
-            const maxScroll = 500; // Pixeles de scroll tras los cuales se cierra totalmente
-            
-            // Calculamos porcentaje de 0 a 1
+            const maxScroll = 500;
             let progress = Math.min(scrollY / maxScroll, 1);
-            
-            // Rotamos la tapa (lidGroup)
-            // Abierto (0) -> Cerrado (-Math.PI / 2 aprox 90 grados)
-            // Ajustamos: empieza un poco abierto (100 grados) y baja a 0 (cerrado plano)
-            // Ojo: Depende de cómo construimos la geometría.
-            // En mi geometría procedural: 0 es plano (cerrado al revés), necesitamos levantarla.
-            
-            // Abrimos inicialmente: -1.8 radianes (aprox 100 grados abierto)
-            // Cerramos: 0 radianes (cerrado)
-            
-            const startAngle = -1.8; // Abierto
-            const endAngle = 0;      // Cerrado
-            
+
+            const startAngle = -1.8;
+            const endAngle = 0;
             const currentAngle = startAngle + (Math.abs(startAngle - endAngle) * progress);
-            
+
             if(lidGroup) {
                 lidGroup.rotation.x = currentAngle;
             }
 
-            // Opcional: Rotar todo el laptop ligeramente mientras se cierra
             laptopGroup.rotation.y = -0.3 + (progress * 0.5);
         }
 
         window.addEventListener('scroll', onScroll);
-
-        // Configuración inicial de apertura
-        lidGroup.rotation.x = -1.8; 
-
+        lidGroup.rotation.x = -1.8;
 
         // 5. Loop de Renderizado
         function animate() {
@@ -531,14 +606,12 @@
         }
         animate();
 
-        // Responsive
         window.addEventListener('resize', () => {
             camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(container.clientWidth, container.clientHeight);
         });
 
-        // Observer para animaciones de texto (Fade In al aparecer)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
