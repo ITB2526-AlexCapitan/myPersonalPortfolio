@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SysAdmin Portfolio | Apple Style</title>
+    <!-- Cargamos Three.js desde CDN -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+        }
+      }
+    </script>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            --accent: #2997ff;
+            --card-bg: rgba(22, 22, 23, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .social-links svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-secondary);
+            transition: fill 0.3s;
+        }
+        
+        .social-links a:hover svg {
+            fill: var(--text-primary);
+        }
+
+        /* --- Hero / 3D Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 60px;
+        }
+
+        .hero-text {
+            text-align: center;
+            z-index: 10;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn Up 1s forwards 0.5s;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            background: linear-gradient(180deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Contenedor del Canvas 3D */
+        #canvas-container {
+            width: 100%;
+            height: 60vh;
+            position: relative;
+            z-index: 5;
+        }
+
+        .scroll-prompt {
+            position: absolute;
+            bottom: 40px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            animation: bounce 2s infinite;
+        }
+
+        /* --- Content Sections --- */
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            padding: 100px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        /* --- About & Server Animation --- */
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .server-rack {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .server-unit {
+            height: 40px;
+            background: #222;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .server-lights {
+            display: flex;
+            gap: 5px;
+        }
+
+        .led {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #333;
+        }
+
+        .led.green { background-color: #00ff00; box-shadow: 0 0 5px #00ff00; animation: blink 0.5s infinite alternate; }
+        .led.blue { background-color: #0088ff; box-shadow: 0 0 5px #0088ff; animation: blink 2s infinite alternate-reverse; }
+        .led.amber { background-color: #ffaa00; box-shadow: 0 0 5px #ffaa00; animation: blink 0.1s infinite; }
+
+        /* --- Projects Grid --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--text-secondary);
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        @keyframes blink {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
+        }
+
+        /* Utility for scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">SysAdmin.</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Work</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <div class="social-links">
+                    <a href="#" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION CON 3D -->
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Arquitectura de Sistemas.</h1>
+            <p class="subtitle">Minimalismo, rendimiento y escalabilidad.</p>
+        </div>
+        
+        <!-- Aquí vive el 3D -->
+        <div id="canvas-container"></div>
+        
+        <div class="scroll-prompt">Scroll para cerrar</div>
+    </div>
+
+    <main>
+        <section id="about" class="reveal">
+            <h2>Sobre mí</h2>
+            <div class="about-container">
+                <div class="about-text">
+                    <h3>Ingeniero de Sistemas</h3>
+                    <p>Especializado en infraestructura cloud y automatización. Transformo procesos complejos en soluciones elegantes y mantenibles. Mi enfoque es similar al diseño de Apple: lo que no se ve es tan importante como lo que se ve.</p>
+                    <p>Manejo Docker, Kubernetes y arquitecturas AWS con precisión quirúrgica.</p>
+                </div>
+                <!-- Animación CSS Server mejorada -->
+                <div class="server-rack">
+                    <div class="server-unit">
+                        <span style="font-family: monospace; font-size: 10px; color: #555;">SRV-01 // PRODUCTION</span>
+                        <div class="server-lights">
+                            <div class="led green" style="animation-duration: 0.3s"></div>
+                            <div class="led green" style="animation-duration: 1.2s"></div>
+                            <div class="led blue"></div>
+                        </div>
+                    </div>
+                    <div class="server-unit">
+                        <span style="font-family: monospace; font-size: 10px; color: #555;">SRV-02 // DATABASE</span>
+                        <div class="server-lights">
+                            <div class="led green"></div>
+                            <div class="led amber"></div>
+                            <div class="led green" style="animation-duration: 0.7s"></div>
+                        </div>
+                    </div>
+                    <div class="server-unit">
+                        <span style="font-family: monospace; font-size: 10px; color: #555;">SRV-03 // BACKUP</span>
+                        <div class="server-lights">
+                            <div class="led blue"></div>
+                            <div class="led green"></div>
+                            <div class="led green"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="reveal">
+            <h2>Proyectos Selectos</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Cloud Migration</h3>
+                    <p>Migración completa de infraestructura on-premise a AWS utilizando Terraform.</p>
+                </div>
+                <div class="project-card">
+                    <h3>DevOps Pipeline</h3>
+                    <p>Implementación de CI/CD con GitHub Actions reduciendo el tiempo de despliegue en un 60%.</p>
+                </div>
+                <div class="project-card">
+                    <h3>Monitoring Hub</h3>
+                    <p>Dashboard centralizado en Grafana para visualización de métricas en tiempo real.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="reveal">
+            <div class="project-card" style="text-align: center;">
+                <h2>Trabajemos Juntos</h2>
+                <p>¿Tienes un desafío técnico? Estoy listo para resolverlo.</p>
+                <br>
+                <a href="mailto:tuemail@ejemplo.com" style="color: var(--accent); text-decoration: none; font-size: 1.2rem;">hola@tuemail.com</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Name. Designed with code.</p>
+    </footer>
+
+    <!-- SCRIPT THREE.JS -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        // 1. Configuración Básica
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        // Niebla negra para fundir el piso con el fondo
+        scene.fog = new THREE.Fog(0x000000, 5, 15);
+
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+        camera.position.set(0, 2, 7);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // 2. Iluminación "Studio"
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const spotLight = new THREE.SpotLight(0xffffff, 1);
+        spotLight.position.set(5, 10, 5);
+        spotLight.angle = 0.5;
+        scene.add(spotLight);
+        
+        const blueLight = new THREE.PointLight(0x2997ff, 2, 10);
+        blueLight.position.set(-2, 1, 2);
+        scene.add(blueLight);
+
+        // 3. Crear el MacBook (Procedural para que funcione sin cargar archivo)
+        // NOTA: Si tienes tu archivo .glb, borra esta parte de "Procedural" y usa el Loader de abajo.
+        
+        const laptopGroup = new THREE.Group();
+        
+        // Materiales estilo Apple
+        const metalMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x888888, 
+            roughness: 0.2, 
+            metalness: 0.8 
+        });
+        const screenBlackMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x050505, 
+            roughness: 0.2 
+        });
+        const screenGlowingMaterial = new THREE.MeshBasicMaterial({ color: 0x1a1a1a }); // Pantalla apagada/oscura
+
+        // A. Base (Teclado)
+        const baseGeometry = new THREE.BoxGeometry(3, 0.1, 2);
+        const base = new THREE.Mesh(baseGeometry, metalMaterial);
+        laptopGroup.add(base);
+
+        // B. Tapa (Pantalla) - Esta es la parte compleja
+        const lidGroup = new THREE.Group();
+        // Movemos el grupo al borde trasero de la base (la bisagra)
+        lidGroup.position.set(0, 0.05, -1); 
+
+        // La geometría de la tapa
+        const lidGeometry = new THREE.BoxGeometry(3, 0.1, 2);
+        // Movemos la geometría para que su centro no esté en el eje, sino desplazado
+        // Así al rotar el grupo, rota desde la bisagra
+        lidGeometry.translate(0, 0, 1); 
+        
+        const lid = new THREE.Mesh(lidGeometry, metalMaterial);
+        
+        // Simular pantalla negra dentro de la tapa
+        const screenGeo = new THREE.PlaneGeometry(2.8, 1.8);
+        screenGeo.translate(0, 0.06, 1); // Pegarlo a la tapa
+        screenGeo.rotateX(-Math.PI / 2);
+        const screenMesh = new THREE.Mesh(screenGeo, screenGlowingMaterial);
+        
+        lidGroup.add(lid);
+        lidGroup.add(screenMesh);
+        laptopGroup.add(lidGroup);
+
+        scene.add(laptopGroup);
+
+        // Rotación inicial para presentación
+        laptopGroup.rotation.y = -0.3;
+        laptopGroup.rotation.x = 0.2;
+
+
+        // --- SI TIENES TU MODELO .GLB, DESCOMENTA ESTO Y BORRA LO ANTERIOR ---
+        /*
+        let lidObject; // Variable para guardar la tapa
+        const loader = new GLTFLoader();
+        loader.load('ruta/a/tu/macbook.glb', (gltf) => {
+            const model = gltf.scene;
+            scene.add(model);
+            
+            // IMPORTANTE: Busca el nombre exacto de la tapa en Blender
+            lidObject = model.getObjectByName('Screen_Lid'); 
+        });
+        */
+
+
+        // 4. Animación al hacer Scroll
+        function onScroll() {
+            const scrollY = window.scrollY;
+            const maxScroll = 500; // Pixeles de scroll tras los cuales se cierra totalmente
+            
+            // Calculamos porcentaje de 0 a 1
+            let progress = Math.min(scrollY / maxScroll, 1);
+            
+            // Rotamos la tapa (lidGroup)
+            // Abierto (0) -> Cerrado (-Math.PI / 2 aprox 90 grados)
+            // Ajustamos: empieza un poco abierto (100 grados) y baja a 0 (cerrado plano)
+            // Ojo: Depende de cómo construimos la geometría.
+            // En mi geometría procedural: 0 es plano (cerrado al revés), necesitamos levantarla.
+            
+            // Abrimos inicialmente: -1.8 radianes (aprox 100 grados abierto)
+            // Cerramos: 0 radianes (cerrado)
+            
+            const startAngle = -1.8; // Abierto
+            const endAngle = 0;      // Cerrado
+            
+            const currentAngle = startAngle + (Math.abs(startAngle - endAngle) * progress);
+            
+            if(lidGroup) {
+                lidGroup.rotation.x = currentAngle;
+            }
+
+            // Opcional: Rotar todo el laptop ligeramente mientras se cierra
+            laptopGroup.rotation.y = -0.3 + (progress * 0.5);
+        }
+
+        window.addEventListener('scroll', onScroll);
+
+        // Configuración inicial de apertura
+        lidGroup.rotation.x = -1.8; 
+
+
+        // 5. Loop de Renderizado
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        // Observer para animaciones de texto (Fade In al aparecer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
